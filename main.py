@@ -177,8 +177,8 @@ def glize(node):
 time = 0
 flag_time = False
 camera = glm.vec3(0, 0, 10)
-camera_speed = 5
-angle_steep = 0.5
+camera_step = 5
+angle_step = 0.5
 angle = 0
 
 def calc_radius(camera):
@@ -186,7 +186,7 @@ def calc_radius(camera):
 
 def process_input():
     global angle, flag_time
-    global angle_steep
+    global angle_steep, camera_step
 
     for event in pygame.event.get():
         # print(event.type)
@@ -196,24 +196,29 @@ def process_input():
             return True
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                angle -= angle_steep
+                angle -= angle_step
                 radius = calc_radius(camera)
-                camera.x = numpy.sin(angle) * 10
-                camera.z = numpy.cos(angle) * 10
+                camera.x = numpy.sin(angle) * radius
+                camera.z = numpy.cos(angle) * radius
             if event.key == pygame.K_RIGHT:
-                angle += angle_steep
+                angle += angle_step
                 radius = calc_radius(camera)
-                camera.x = numpy.sin(angle) * 10
-                camera.z = numpy.cos(angle) * 10
+                camera.x = numpy.sin(angle) * radius
+                camera.z = numpy.cos(angle) * radius
+
             if event.key == pygame.K_UP:
-                camera.y += camera_speed
+                camera.y += camera_step
             if event.key == pygame.K_DOWN:
-                camera.y -= camera_speed
+                camera.y -= camera_step
 
             if event.key == pygame.K_s:
-                camera.z += camera_speed
+                radius = calc_radius(camera) + camera_step
+                camera.x = numpy.sin(angle) * radius
+                camera.z = numpy.cos(angle) * radius
             if event.key == pygame.K_w and camera.z > 5:
-                camera.z -= camera_speed
+                radius = calc_radius(camera) - camera_step
+                camera.x = numpy.sin(angle) * radius
+                camera.z = numpy.cos(angle) * radius
             if event.key == pygame.K_t:
                 print
                 flag_time = not flag_time
